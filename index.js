@@ -23,12 +23,29 @@ async function run() {
 
     const database = client.db("packageData");
     const packageCollection = database.collection("packageCollection");
+    const userCollection = database.collection("userCollection");
 
     //GET API for packages
     app.get("/packages", async (req, res) => {
       const cursor = packageCollection.find({});
       const result = await cursor.toArray();
       console.log("Getting all packages");
+      res.json(result);
+    });
+
+    //GET package by id
+    app.get("/packages/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const package = await packageCollection.findOne(query);
+      console.log("Booked package", package);
+      res.json(package);
+    });
+
+    //POST user collection
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
       res.json(result);
     });
   } finally {
