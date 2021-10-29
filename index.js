@@ -20,7 +20,17 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    console.log("Client Connect Successfully!");
+
+    const database = client.db("packageData");
+    const packageCollection = database.collection("packageCollection");
+
+    //GET API for packages
+    app.get("/packages", async (req, res) => {
+      const cursor = packageCollection.find({});
+      const result = await cursor.toArray();
+      console.log("Getting all packages");
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
