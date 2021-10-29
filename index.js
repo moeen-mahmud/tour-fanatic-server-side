@@ -48,6 +48,13 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.json(result);
     });
+
+    //GET user packages from user collection
+    app.get("/users", async (req, res) => {
+      const cursor = userCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
