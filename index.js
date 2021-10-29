@@ -33,6 +33,13 @@ async function run() {
       res.json(result);
     });
 
+    //ADD a package
+    app.post("/packages", async (req, res) => {
+      const package = req.body;
+      const result = await packageCollection.insertOne(package);
+      res.json(result);
+    });
+
     //GET package by id
     app.get("/packages/:id", async (req, res) => {
       const id = req.params.id;
