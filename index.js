@@ -55,6 +55,30 @@ async function run() {
       const result = await cursor.toArray();
       res.json(result);
     });
+
+    //DELETE user package from users collection
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.json(result);
+    });
+
+    //PUT or EDIT user package status
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateStatus = req.body;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: {
+          packageStatus: updateStatus.packageStatus,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, option);
+      console.log("Updating Status", result);
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
